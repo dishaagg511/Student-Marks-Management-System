@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBtableModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="marks">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="SubjectId" Type="int" Nullable="false" />
+    <Property Name="StudentId" Type="int" Nullable="false" />
+    <Property Name="Marks" Type="float" Nullable="false" />
+    <Property Name="Subject Name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="students">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="Candidate Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Father Name" Type="varchar" MaxLength="50" />
+    <Property Name="DOB" Type="datetime" />
+    <Property Name="Mobile Number" Type="nchar" MaxLength="10" />
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="subjects">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+    </Key>
+    <Property Name="SubjectId" Type="int" Nullable="false" />
+    <Property Name="SubjectName" Type="text" />
+  </EntityType>
+  <Association Name="FK_marks_students">
+    <End Role="subjects" Type="Self.subjects" Multiplicity="1" />
+    <End Role="marks" Type="Self.marks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="marks">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_marks_students1">
+    <End Role="students" Type="Self.students" Multiplicity="1" />
+    <End Role="marks" Type="Self.marks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="students">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="marks">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBtableModelStoreContainer">
+    <EntitySet Name="marks" EntityType="Self.marks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="students" EntityType="Self.students" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="subjects" EntityType="Self.subjects" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_marks_students" Association="Self.FK_marks_students">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="marks" EntitySet="marks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_marks_students1" Association="Self.FK_marks_students1">
+      <End Role="students" EntitySet="students" />
+      <End Role="marks" EntitySet="marks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

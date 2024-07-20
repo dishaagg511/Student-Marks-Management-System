@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBtableModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="mark">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="SubjectId" Type="Int32" Nullable="false" />
+    <Property Name="StudentId" Type="Int32" Nullable="false" />
+    <Property Name="Marks" Type="Double" Nullable="false" />
+    <Property Name="Subject_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="subject" Relationship="Self.FK_marks_students" FromRole="marks" ToRole="subjects" />
+    <NavigationProperty Name="student" Relationship="Self.FK_marks_students1" FromRole="marks" ToRole="students" />
+  </EntityType>
+  <EntityType Name="student">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="Candidate_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Father_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DOB" Type="DateTime" Precision="3" />
+    <Property Name="Mobile_Number" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="marks" Relationship="Self.FK_marks_students1" FromRole="students" ToRole="marks" />
+  </EntityType>
+  <EntityType Name="subject">
+    <Key>
+      <PropertyRef Name="SubjectId" />
+    </Key>
+    <Property Name="SubjectId" Type="Int32" Nullable="false" />
+    <Property Name="SubjectName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="marks" Relationship="Self.FK_marks_students" FromRole="subjects" ToRole="marks" />
+  </EntityType>
+  <Association Name="FK_marks_students">
+    <End Role="subjects" Type="Self.subject" Multiplicity="1" />
+    <End Role="marks" Type="Self.mark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="SubjectId" />
+      </Principal>
+      <Dependent Role="marks">
+        <PropertyRef Name="SubjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_marks_students1">
+    <End Role="students" Type="Self.student" Multiplicity="1" />
+    <End Role="marks" Type="Self.mark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="students">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="marks">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBtableEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="marks" EntityType="Self.mark" />
+    <EntitySet Name="students" EntityType="Self.student" />
+    <EntitySet Name="subjects" EntityType="Self.subject" />
+    <AssociationSet Name="FK_marks_students" Association="Self.FK_marks_students">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="marks" EntitySet="marks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_marks_students1" Association="Self.FK_marks_students1">
+      <End Role="students" EntitySet="students" />
+      <End Role="marks" EntitySet="marks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
